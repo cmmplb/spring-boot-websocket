@@ -1,37 +1,40 @@
-# spring-boot-websocket
+# 学习springboot整合websocket、netty
 
-#### 介绍
-学习springboot整合websocket、netty
+前端：vue+element-ui
 
-#### 软件架构
-软件架构说明
+版本：
 
+| 依赖         | 版本     |
+|------------|--------|
+| springboot | 2.5.3  |
+| vue        | 2.6.14 |
 
-#### 安装教程
+仓库地址：https://gitee.com/cmmplb/spring-boot-websocket
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+本来打算写个前端连接websocket和netty的demo，顺着就写个通讯录的学习学习。
 
-#### 使用说明
+目前只加了首页的样式和上传头像切换功能，学习一下，简单实现通讯录的逻辑，一点一点的加代码。
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+后续完成的话会把vue合在boot项目做单体，现在先方便调试，前后端分离。
 
-#### 参与贡献
+# todo
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+- 通讯录
+- 群聊
+- 单聊
+- 离线消息
+- 是否已读
 
+# 项目图片
 
-#### 特技
+#### 首页
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+![image_01.png](doc%2Fimages%2Fimage_01.png)
+
+#### 上传头像
+
+![image_02.png](doc%2Fimages%2Fimage_02.png)
+
+#### 方便学习，没有集成认证，点击右上角直接切换用户。
+
+![image_03.png](doc%2Fimages%2Fimage_03.png)

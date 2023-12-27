@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmmplb.websocket.dao.UserMapper">
+    <sql id="base_column">
+        <!-- @sql select -->
+        su.`id`,
+        su.`username`,
+        su.`name`,
+        su.`sex`,
+        su.`status`,
+        su.`create_time`,
+        su.`update_time`
+        <!-- @sql from `sys_user` su -->
+    </sql>
+
+    <sql id="base_select">
+        select
+        <include refid="base_column"/>
+        from `sys_user` su
+    </sql>
+
+    <select id="selectInfoById" resultType="com.cmmplb.websocket.vo.UserInfoVO">
+        select
+        <include refid="base_column"/>
+        ,sa.`url` as avatar
+        from `sys_user` su
+        left join `sys_attachment` sa on su.`avatar` = sa.`id`
+        where su.`id` = #{id}
+    </select>
+
+    <select id="selectList" resultType="com.cmmplb.websocket.vo.UserInfoVO">
+        select
+        <include refid="base_column"/>
+        ,sa.url as avatar
+        from `sys_user` su
+        left join `sys_attachment` sa on su.`avatar` = sa.`id`
+        order by su.`create_time` desc
+    </select>
+</mapper>

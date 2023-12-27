@@ -1,0 +1,4 @@
+/* 页面flex布局 */
+.app-wrapper {
+    display: flex;
+}

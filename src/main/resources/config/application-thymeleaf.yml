@@ -1,0 +1,4 @@
+spring:
+  thymeleaf:
+    encoding: UTF-8 #模板编码
+    prefix: classpath:/templates/ #在构建URL时添加到视图名称前的前缀（默认值：classpath:/templates/）
