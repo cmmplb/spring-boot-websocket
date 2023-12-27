@@ -14,11 +14,11 @@ import com.cmmplb.websocket.utils.SecurityUtil;
 import com.cmmplb.websocket.vo.AttachmentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,7 +59,7 @@ public class AttchmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachme
             // 获取文件名
             String fileName = file.getOriginalFilename();
             String suffixName = "";
-            if (StringUtils.isEmpty(fileName) && fileName.lastIndexOf(".") != -1) {
+            if (StringUtils.isNotEmpty(fileName) && fileName.lastIndexOf(".") != -1) {
                 // 根据文件名获取文件后缀名
                 suffixName = fileName.substring(fileName.lastIndexOf("."));
             }

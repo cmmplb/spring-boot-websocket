@@ -265,13 +265,13 @@ export default {
       if (this.userInfo.avatar) {
         this.imgUrl = this.userInfo.avatar;
       } else {
-        if (this.userInfo.sex === 0) {
-          this.imgUrl = 'http://localhost/attachment/download/c5ebe159fb0a94d3dd0ec9c73605d7d1.png';
-        } else if (this.userInfo.sex === 1) {
-          this.imgUrl = 'http://localhost/attachment/download/a56f0a0de5492be587cde81f9d9110d8.png';
-        } else {
-          this.imgUrl = '';
-        }
+          if (this.userInfo.sex === 0) {
+              this.imgUrl = 'http://localhost/attachment/download/088d93736b6290b1b2149e8056140b2f.png';
+          } else if (this.userInfo.sex === 1) {
+              this.imgUrl = 'http://localhost/attachment/download/78190f0fbe558af32b52da98768d4ef2.png';
+          } else {
+              this.imgUrl = '';
+          }
       }
     },
     // 关闭上传头像弹窗
