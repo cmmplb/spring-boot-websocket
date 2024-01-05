@@ -1,6 +1,5 @@
 package com.cmmplb.websocket.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -27,6 +26,11 @@ public class UserInfoVO implements Serializable {
      * 头像-图片访问地址
      */
     private String avatar;
+
+    /**
+     * 个性签名
+     */
+    private String signature;
 
     /**
      * 用户名

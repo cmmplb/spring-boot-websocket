@@ -17,13 +17,19 @@
 
 后续完成的话会把vue合在boot项目做单体，现在先方便调试，前后端分离。
 
-# todo
+#### finished
+
+![image_04.png](doc%2Fimages%2Fimage_04.png)
+
+- 单聊
+
+#### todo
 
 - 通讯录
 - 群聊
-- 单聊
 - 离线消息
 - 是否已读
+- 黑名单
 
 # 项目图片
 
@@ -38,3 +44,35 @@
 #### 方便学习，没有集成认证，点击右上角直接切换用户。
 
 ![image_03.png](doc%2Fimages%2Fimage_03.png)
+
+#### 遇到的问题
+
+1. vue绑定数据修改了但是页面上没刷新，使用vue事件强制更新
+
+````
+this.$forceUpdate();
+````
+
+2. 设置滚动条位置时不生效，等待dom加载完成
+
+````
+nextTick(() => {
+    todo:
+})
+````
+
+3. 上拉滑动加载数据实现，添加滚动事件后，计算距离顶部的距离，为0则到顶触发响应的事件
+
+````
+addEventListener("scroll", this.handle);
+
+handle(event){
+ console.log(event.target.scrollTop );
+}
+
+````
+
+***
+
+2024-01-05
+这周加了个双向聊天接收消息功能
