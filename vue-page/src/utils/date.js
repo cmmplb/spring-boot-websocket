@@ -29,7 +29,7 @@ export function dateFormat(date) {
     const week = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
     // 当前时间和传入日期小于60秒显示刚刚
     if ((currentTimestamp - dateTimestamp) / 1000 <= 60) {
-        timeStr = " 刚刚";
+        timeStr = "刚刚";
     } else if (dateObj.year === currentObj.year && dateObj.month === currentObj.month && dateObj.date === currentObj.date) {
         // 今天
         timeStr += dateObj.hours + ":" + dateObj.minutes;
@@ -44,11 +44,12 @@ export function dateFormat(date) {
         // 上周
         timeStr += week[dateObj.day] + " " + dateObj.hours + ":" + dateObj.minutes;
     } else {
-        // 年月
-        timeStr += dateObj.year + "年" + dateObj.month + "月" + dateObj.date + "日 ";
+        // 年月日时分
+        timeStr += dateObj.year + "年" + dateObj.month + "月" + dateObj.date + "日 " + dateObj.hours + ":" + dateObj.minutes;
     }
     return timeStr;
 }
+
 function getDayPerMonth(year) {
     const arr = [];
     arr[1] = 31;

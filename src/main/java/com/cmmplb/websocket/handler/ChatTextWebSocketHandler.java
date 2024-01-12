@@ -3,9 +3,12 @@ package com.cmmplb.websocket.handler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cmmplb.websocket.dto.MessageDTO;
 import com.cmmplb.websocket.entity.MessageRecord;
+import com.cmmplb.websocket.entity.RecentlyMessage;
 import com.cmmplb.websocket.service.MessageRecordService;
+import com.cmmplb.websocket.service.RecentlyMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -32,6 +35,9 @@ public class ChatTextWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private MessageRecordService messageRecordService;
+
+    @Autowired
+    private RecentlyMessageService recentlyMessageService;
 
     /**
      * key：用户id
@@ -81,18 +87,45 @@ public class ChatTextWebSocketHandler extends TextWebSocketHandler {
         log.info("attributes:{}", attributes);
         MessageDTO msg = JSONObject.parseObject(message.getPayload(), new TypeReference<MessageDTO>() {
         });
+
+        // todo:这里可以做一个临时存储，数据量到达n条或者用户断开连接以后才保存，避免每次发送都调用数据库保存
         // 保存消息记录
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setType(msg.getType());
         messageRecord.setSendBusinessId(userId);
         messageRecord.setReceiveBusinessId(msg.getReceiveBusinessId());
         messageRecord.setMessage(msg.getMessage());
+        messageRecord.setSendTime(new Date());
         messageRecord.setCreateTime(new Date());
         messageRecord.setCreateBy(userId);
         messageRecord.setUpdateTime(new Date());
         messageRecord.setUpdateBy(userId);
-
         messageRecordService.save(messageRecord);
+
+        // 保存最近消息
+        RecentlyMessage recentlyMessage = recentlyMessageService.getOne(new LambdaQueryWrapper<RecentlyMessage>()
+                .eq(RecentlyMessage::getSendBusinessId, userId)
+                .eq(RecentlyMessage::getReceiveBusinessId, msg.getReceiveBusinessId())
+        );
+        if (null == recentlyMessage) {
+            recentlyMessage = new RecentlyMessage();
+            recentlyMessage.setType(msg.getType());
+            recentlyMessage.setSendBusinessId(userId);
+            recentlyMessage.setReceiveBusinessId(msg.getReceiveBusinessId());
+            recentlyMessage.setMessage(msg.getMessage());
+            recentlyMessage.setSendTime(new Date());
+            recentlyMessage.setCreateTime(new Date());
+            recentlyMessage.setCreateBy(userId);
+            recentlyMessage.setUpdateTime(new Date());
+            recentlyMessage.setUpdateBy(userId);
+            recentlyMessageService.save(recentlyMessage);
+        } else {
+            recentlyMessage.setSendTime(new Date());
+            recentlyMessage.setMessage(msg.getMessage());
+            recentlyMessage.setUpdateTime(new Date());
+            recentlyMessage.setUpdateBy(userId);
+            recentlyMessageService.updateById(recentlyMessage);
+        }
         msg.setId(messageRecord.getId());
         log.info("msg：{}", msg);
         sendMessage(msg);

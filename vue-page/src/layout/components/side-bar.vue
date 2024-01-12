@@ -15,7 +15,7 @@
         </a>
       </li>
       <li class="nav-item" @click="handlerNav(3)">
-        <a class="nav-link" :style="navActivate === 'dynamics' ? 'color: coral' : ''">
+        <a class="nav-link" :style="navActivate === 'find' ? 'color: coral' : ''">
           <i class="el-icon-chat-dot-round"></i>
           <span>发现</span>
         </a>
@@ -58,10 +58,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang='scss'>
 /* 左侧菜单条 */
 .aside-container {
-  width: 100px;
   display: flex;
   /* 动态计算盒子的高度，70的导航加1的边框 */
   height: calc(100vh - 71px);
@@ -70,31 +69,39 @@ export default {
   border-right: 1px solid #70809054 !important;
   /* box-shadow: 水平阴影 垂直阴影 模糊距离 阴影尺寸 阴影颜色 内外阴影; */
   box-shadow: 1px 0 1px rgba(0, 0, 0, .075) !important;
+
+  .nav {
+    display: flex;
+    flex-direction: column;
+
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px;
+
+      i {
+        font-size: 25px;
+      }
+
+      span {
+        white-space: nowrap;
+      }
+    }
+
+    .aside-container .nav .nav-link:hover {
+      color: coral;
+      cursor: pointer
+    }
+
+    .nav-item-top {
+      margin-top: 20px;
+    }
+
+  }
 }
 
-.aside-container .nav {
-  display: flex;
-  flex-direction: column;
-}
 
-.aside-container .nav .nav-link {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px;
-}
-
-.aside-container .nav .nav-item-top {
-  margin-top: 20px;
-}
-
-.aside-container .nav .nav-link i {
-  font-size: 25px;
-}
-
-.aside-container .nav .nav-link:hover {
-  color: coral;
-  cursor: pointer
-}
 </style>

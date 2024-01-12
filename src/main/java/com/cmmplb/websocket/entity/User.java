@@ -32,6 +32,12 @@ public class User implements Serializable {
     private Long avatar;
 
     /**
+     * 个性签名
+     */
+    @TableField(value = "signature")
+    private String signature;
+
+    /**
      * 用户名
      */
     @TableField(value = "username")

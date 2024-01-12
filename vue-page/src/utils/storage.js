@@ -1,4 +1,4 @@
-import { validateNull } from '@/utils/validate';
+import {validateNull} from "@/utils/validate";
 
 /**
  * 获取localStorage
@@ -8,7 +8,7 @@ import { validateNull } from '@/utils/validate';
 export const getStorage = (params = {}) => {
     let {
         name,
-        type,
+        type
     } = params;
     let obj, content;
     if (type === "session") {
@@ -24,13 +24,13 @@ export const getStorage = (params = {}) => {
     if (validateNull(obj)) {
         return obj;
     }
-    if (obj.dataType === 'string') {
+    if (obj.dataType === "string") {
         content = obj.content;
-    } else if (obj.dataType === 'number') {
+    } else if (obj.dataType === "number") {
         content = Number(obj.content);
-    } else if (obj.dataType === 'boolean') {
+    } else if (obj.dataType === "boolean") {
         content = eval(obj.content);
-    } else if (obj.dataType === 'object') {
+    } else if (obj.dataType === "object") {
         content = obj.content;
     }
     return content;
@@ -44,13 +44,13 @@ export const setStorage = (params = {}) => {
     let {
         name,
         content,
-        type,
+        type
     } = params;
     let obj = {
         dataType: typeof (content),
         content: content,
         type: type,
-        datetime: new Date().getTime(),
+        datetime: new Date().getTime()
     };
     obj = JSON.stringify(obj);
     if (type === "session") {
@@ -67,7 +67,7 @@ export const setStorage = (params = {}) => {
 export const removeStorage = (params = {}) => {
     let {
         name,
-        type,
+        type
     } = params;
     if (type === "session") {
         window.sessionStorage.removeItem(name);

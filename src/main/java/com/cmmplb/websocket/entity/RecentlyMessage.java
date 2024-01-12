@@ -9,13 +9,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author plb
- * @date 2020/6/15 11:16
- * 消息记录表
- */
+* @author penglibo
+* @date 2024-01-05 16:56:29
+* @since jdk 1.8
+ * 最近消息表
+*/
+
 @Data
-@TableName(value = "chat_message_record")
-public class MessageRecord implements Serializable {
+@TableName(value = "chat_recently_message")
+public class RecentlyMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,7 +1,6 @@
 package com.cmmplb.websocket.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cmmplb.websocket.entity.User;
 import com.cmmplb.websocket.vo.UserInfoVO;
 import org.apache.ibatis.annotations.Param;

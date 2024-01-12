@@ -1,9 +1,10 @@
-package com.cmmplb.websocket.dto;
+package com.cmmplb.websocket.vo;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.cmmplb.websocket.utils.DateUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,33 +12,24 @@ import java.util.Date;
  * @date 2023-12-29 10:14:18
  * @since jdk 1.8
  */
+
 @Data
-public class MessageDTO {
+public class RecentlyMessageVO implements Serializable {
 
     /**
-     * 消息id
+     * 最近消息id
      */
     private Long id;
 
     /**
-     * 发送人姓名
+     * 名称
      */
     private String name;
 
     /**
-     * 发送人头像
+     * 头像-图片访问地址
      */
     private String avatar;
-
-    /**
-     * 发送人:用户id/群id
-     */
-    private Long sendBusinessId;
-
-    /**
-     * 接收人:用户id/群id
-     */
-    private Long receiveBusinessId;
 
     /**
      * 类型:1-用户;2-群
@@ -45,15 +37,25 @@ public class MessageDTO {
     private Byte type;
 
     /**
-     * 发送的文本
+     * 1-发送;2-接收;
+     */
+    private Byte send;
+
+    /**
+     * 用户id/群id
+     */
+    private Long businessId;
+
+    /**
+     * 消息
      */
     private String message;
 
     /**
      * 发送时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date sendTime = new Date();
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date sendTime;
 
     /**
      * 发送时间:刚刚、今天、日期
@@ -66,4 +68,5 @@ public class MessageDTO {
         }
         return time;
     }
+
 }

@@ -11,6 +11,11 @@ import com.cmmplb.websocket.utils.SecurityUtil;
 import com.cmmplb.websocket.vo.ContactVO;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author penglibo
+ * @date 2023-12-19 13:56:02
+ * @since jdk 1.8
+ */
 @Service
 public class ContactServiceImpl extends ServiceImpl<ContactMapper, Contact> implements ContactService {
 

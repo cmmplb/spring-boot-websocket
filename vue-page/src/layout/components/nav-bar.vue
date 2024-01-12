@@ -2,7 +2,8 @@
   <div class='navbar-container'>
     <!-- 导航栏 -->
     <a href="#" class="navbar-logo">
-      <img src="../../assets/icons/logo.png" width="50" height="50" style="margin-right: 10px;border-radius: 50px" alt="home">
+      <img src="../../assets/icons/logo.png" width="50" height="50" style="margin-right: 10px;border-radius: 50px"
+           alt="home">
       <h1>Chat</h1>
     </a>
     <div class="navbar-nav">
@@ -34,7 +35,7 @@
     </div>
 
     <!-- 上传头像 -->
-    <el-dialog append-to-body title="上传头像" :visible="avatarVisible" width="400px"
+    <el-dialog append-to-body title="上传头像" class="upload-avatar-dialog" :visible="avatarVisible" width="400px"
                :before-close="handleAvatarClose">
       <!-- 文件上传 -->
       <el-upload
@@ -159,13 +160,13 @@
 
 <script>
 
-import {VueCropper} from 'vue-cropper';
-import {getInfo, updateAvatar} from '@/api/sys/user';
-import {upload} from '@/api/sys/attachment';
-import {mapGetters} from 'vuex';
+import {VueCropper} from "vue-cropper";
+import {getInfo, updateAvatar} from "@/api/sys/user";
+import {upload} from "@/api/sys/attachment";
+import {mapGetters} from "vuex";
 
 export default {
-  name: 'nav-bar-container',
+  name: "nav-bar-container",
   components: {
     VueCropper
   },
@@ -187,17 +188,17 @@ export default {
       // 是否裁剪圆形框，默认圆形
       circular: true,
       // 上传的文件
-      file: '',
+      file: "",
       // 存放文件名
-      fileName: '',
+      fileName: "",
       // 图片上传id
-      imgId: '',
+      imgId: "",
       // 图片路径
-      imgUrl: ''
+      imgUrl: ""
     };
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(["userInfo"])
   },
   watch: {},
   created() {
@@ -210,13 +211,13 @@ export default {
     handlerChangeUpload(file) {
       const isLt5M = file.size / 1024 / 1024 < 5;
       if (!isLt5M) {
-        this.$message.error('上传头像图片大小不能超过5MB');
+        this.$message.error("上传头像图片大小不能超过5MB");
         return false;
       }
-      const img = file.name.substring(file.name.lastIndexOf('.') + 1);
-      const suffix = img === 'jpg' || img === 'png' || img === 'jpeg' || img === 'JPG' || img === 'PNG' || img === 'JPEG';
+      const img = file.name.substring(file.name.lastIndexOf(".") + 1);
+      const suffix = img === "jpg" || img === "png" || img === "jpeg" || img === "JPG" || img === "PNG" || img === "JPEG";
       if (!suffix) {
-        this.$message.error('只能上传jpg/png/jpeg文件');
+        this.$message.error("只能上传jpg/png/jpeg文件");
         return false;
       }
       // URL.createObjectURL的参数只能是blob或者file类型
@@ -224,7 +225,7 @@ export default {
       const reader = new FileReader();
       reader.onload = () => {
         // 把Array Buffer转化为blob 如果是base64不需要
-        if (typeof reader.result === 'object') {
+        if (typeof reader.result === "object") {
           this.file = window.URL.createObjectURL(new Blob([reader.result]));
         } else {
           this.file = reader.result;
@@ -248,7 +249,7 @@ export default {
             // 刷新用户信息
             getInfo().then(res => {
               if (res.data.code === 200 && res.data.data) {
-                this.$store.dispatch('user/setUserInfo', res.data.data);
+                this.$store.dispatch("user/setUserInfo", res.data.data);
               }
             });
             this.handleAvatarClose();
@@ -263,11 +264,11 @@ export default {
         this.imgUrl = this.userInfo.avatar;
       } else {
         if (this.userInfo.sex === 0) {
-          this.imgUrl = 'http://localhost/attachment/download/088d93736b6290b1b2149e8056140b2f.png';
+          this.imgUrl = "http://localhost/attachment/download/088d93736b6290b1b2149e8056140b2f.png";
         } else if (this.userInfo.sex === 1) {
-          this.imgUrl = 'http://localhost/attachment/download/78190f0fbe558af32b52da98768d4ef2.png';
+          this.imgUrl = "http://localhost/attachment/download/78190f0fbe558af32b52da98768d4ef2.png";
         } else {
-          this.imgUrl = '';
+          this.imgUrl = "";
         }
       }
     },
@@ -289,7 +290,7 @@ export default {
             const image = new Image();
             image.src = src;
             image.onload = async () => {
-              const canvas = document.createElement('canvas');
+              const canvas = document.createElement("canvas");
               const width = image.width;
               const height = image.height;
               canvas.width = width;
@@ -300,10 +301,10 @@ export default {
                 y: height / 2,
                 r: width / 2
               };
-              const context = canvas.getContext('2d');
+              const context = canvas.getContext("2d");
               context.clearRect(0, 0, width, height);
               // 在canvas开始绘制前填充白色透明背景并设置透明度，用以清除图片裁剪后透明区域变成黑色的问题
-              context.fillStyle = 'rgba(255, 255, 255, 0)';
+              context.fillStyle = "rgba(255, 255, 255, 0)";
               context.fillRect(0, 0, width, height);
 
               // 开始路径画圆，剪切处理
@@ -314,18 +315,18 @@ export default {
               context.drawImage(image, 0, 0);
               context.restore(); // 返回之前保存过的路径状态和属性，恢复状态
 
-              console.log('3333');
+              console.log("3333");
               // 将canvas图片转换成 blob数据
               canvas.toBlob(blobData => {
                 file = new File([blobData], this.fileName, {type: blobData.type, lastModified: Date.now()});
               });
             };
             image.onerror = err => {
-              console.log('image err', err);
+              console.log("image err", err);
             };
           };
           reader.onerror = err => {
-            console.log('reader err', err);
+            console.log("reader err", err);
           };
         } else {
           // new File()的第一个参数是一个字符串数组，数组中的每一个元素对应着文件中一行的内容
@@ -335,9 +336,9 @@ export default {
         }
         // 等待文件转换完成
         setTimeout(async () => {
-          console.log('444');
+          console.log("444");
           file.uid = Date.now();
-          form.append('files', file);
+          form.append("files", file);
           // 如果想在这里打印查看form的值，会发现它是空对象
           // 解决办法，需要用form.get('键')的方法获取值
           // console.log(form.get('file'));
@@ -372,9 +373,9 @@ export default {
     },
     // 裁剪头像下载
     handleDownload(type) {
-      let aLink = document.createElement('a');
+      let aLink = document.createElement("a");
       aLink.download = this.fileName;
-      if (type === 'blob') {
+      if (type === "blob") {
         this.$refs.imageCropper.getCropBlob((data) => {
           window.URL.createObjectURL(data);
           aLink.href = window.URL.createObjectURL(data);
@@ -391,7 +392,7 @@ export default {
     /* 切换用户相关事件 */
     // 打开切换用户弹窗
     handlerSwitchUser() {
-      this.$emit('getOfflineUserList');
+      this.$emit("getOfflineUserList");
       this.userVisible = true;
     },
     // 关闭切换用户弹窗
@@ -402,9 +403,11 @@ export default {
     handlerUserConfirm() {
       this.offlineUserOption.map(ele => {
         if (this.userId === ele.id) {
-          this.$store.dispatch('user/setUserInfo', ele);
+          this.$store.dispatch("user/setUserInfo", ele);
           this.userId = undefined;
         }
+        // 刷新当前页面
+        window.location.reload();
       });
       this.userVisible = false;
     }
@@ -413,7 +416,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang='scss'>
 /* 顶部导航栏 */
 .navbar-container {
   display: flex;
@@ -422,96 +425,106 @@ export default {
   border-bottom: 1px solid #70809054 !important;
   /* box-shadow: 水平阴影 垂直阴影 模糊距离 阴影尺寸 阴影颜色 内外阴影; */
   box-shadow: 0 3px 3px rgba(0, 0, 0, .075) !important;
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    /* 背景色设置为透明 */
+    background-color: transparent;
+    margin-left: 10px;
+  }
+
+  .navbar-nav {
+    .navbar-nav-dropdown {
+      display: flex;
+
+      .navbar-nav-message {
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+
+        span {
+          margin-right: 10px;
+          font-size: 14px;
+        }
+
+        .user-avatar {
+          img {
+            margin-right: 20px;
+            display: block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
 }
 
-.navbar-container .navbar-logo {
-  display: flex;
-  align-items: center;
-  /* 背景色设置为透明 */
-  background-color: transparent;
-  margin-left: 10px;
-}
+/* 上传头像弹窗样式 */
+.upload-avatar-dialog {
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
 
-.navbar-container .navbar-nav .navbar-nav-dropdown {
-  display: flex;
-}
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
 
-.navbar-container .navbar-nav .navbar-nav-dropdown .navbar-nav-message {
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-}
+  /* 上传后的头像预览样式 */
+  .upload-avatar {
+    margin-left: 90px;
+    width: 180px;
+    height: 180px;
+    display: block;
+  }
 
-.navbar-container .navbar-nav .navbar-nav-dropdown .navbar-nav-message span {
-  margin-right: 10px;
-  font-size: 14px;
-}
-
-.navbar-container .navbar-nav .navbar-nav-dropdown .navbar-nav-message .user-avatar img {
-  margin-right: 20px;
-  display: block;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-/* 上传头像样式 */
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.el-upload-dragger {
-  border: none;
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-
-/* 上传后的头像预览样式 */
-.upload-avatar {
-  margin-left: 90px;
-  width: 180px;
-  height: 180px;
-  display: block;
+  .el-upload-dragger {
+    border: none;
+  }
 }
 
 /* 裁剪图片 */
-.image-cropper-dialog .image-cropper {
-  height: 500px;
-  width: auto;
-  /*background-image: radial-gradient(#ffffff, #ffffff, #ffffff);*/
-}
+.image-cropper-dialog {
+  .image-cropper {
+    height: 500px;
+    width: auto;
+    /*background-image: radial-gradient(#ffffff, #ffffff, #ffffff);*/
+  }
 
-/* 圆形裁剪框 */
-.image-cropper-circular .cropper-view-box {
-  /*   将裁剪框由方形调整为圆形 */
-  border-radius: 50%;
-}
+  /* 圆形裁剪框 */
+  .image-cropper-circular .cropper-view-box {
+    /*   将裁剪框由方形调整为圆形 */
+    border-radius: 50%;
+  }
 
-.cropper-face {
-  /*  清除裁剪框填充背景色  */
-  background-color: transparent !important;
-}
+  /* 裁剪操作按钮 */
+  .image-cropper-action {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
 
-/* 裁剪操作按钮 */
-.image-cropper-action {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-}
+    .action {
+      margin-right: 10px;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    }
+  }
 
-.image-cropper-action .action {
-  margin-right: 10px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  .cropper-face {
+    /*  清除裁剪框填充背景色  */
+    background-color: transparent !important;
+  }
 }
 
 /* 切换用户 */
-.switch-user-dialog .el-select {
-  margin-left: 40px;
+.switch-user-dialog {
+  .el-select {
+    margin-left: 40px;
+  }
 }
 </style>

@@ -7,8 +7,11 @@
       <!-- 左侧菜单 -->
       <side-bar :navActivate="navActivate" @setNavActivate="setNavActivate"/>
 
-      <!-- 内容布局 -->
-      <main-content ref="mainContentRef" :navActivate="navActivate" @sendMessage="sendMessage"/>
+      <!-- 联系人 -->
+      <concat @handlerMessageUser="handlerMessageUser" ref="mainContentRef" :navActivate="navActivate"/>
+
+      <!-- 聊天框 -->
+      <chatting @sendMessage="sendMessage" ref="contentChatting"/>
     </div>
 
   </div>
@@ -19,15 +22,17 @@
 import {mapGetters} from "vuex";
 import NavBar from "@/layout/components/nav-bar.vue";
 import SideBar from "@/layout/components/side-bar.vue";
-import MainContent from "@/layout/components/main-content.vue";
+import Concat from "@/layout/components/concat/index.vue";
+import Chatting from "@/layout/components/chatting.vue";
 import {getOfflineUserList} from "@/api/sys/user";
 
 export default {
   name: "chat-vue",
   components: {
+    Chatting,
     NavBar,
     SideBar,
-    MainContent
+    Concat
   },
   props: {},
   data() {
@@ -63,6 +68,9 @@ export default {
       }
       // 获取到用户信息后建立连接
       this.connect();
+    },
+    handlerMessageUser() {
+      this.$refs.contentChatting.handlerMessageUser();
     },
     // 获取离线用户列表
     getOfflineUserList() {
@@ -127,13 +135,12 @@ export default {
 
 </script>
 
-<style>
+<style scoped lang='scss'>
 /* 页面flex布局 */
 .app-wrapper {
   //flex: 1 2 auto;
-}
-
-.app-wrapper-content {
-  display: flex;
+  .app-wrapper-content {
+    display: flex;
+  }
 }
 </style>

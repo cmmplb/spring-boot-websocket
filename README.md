@@ -19,7 +19,7 @@
 
 #### finished
 
-![image_04.png](doc%2Fimages%2Fimage_04.png)
+![image_05.png](doc%2Fimages%2Fimage_05.png)
 
 - 单聊
 
@@ -76,3 +76,8 @@ handle(event){
 
 2024-01-05
 这周加了个双向聊天接收消息功能
+
+***
+
+2024-01-12
+这周加了vuex存储最近消息和聊天记录，发送消息后将聊天用户置顶，同时把每个组件拆分了一下。

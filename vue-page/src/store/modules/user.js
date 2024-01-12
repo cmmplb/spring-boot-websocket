@@ -1,24 +1,25 @@
-import { getStorage, setStorage } from '@/utils/storage';
+import {getStorage, setStorage} from "@/utils/storage";
+import {currentUserKey} from "@/utils/constant";
 
 const state = {
-    userInfo: getStorage({name: 'currentUser'}) || {},
+    userInfo: getStorage({name: currentUserKey}) || {}
 };
 
 const mutations = {
     SET_USER_INFO: (state, userInfo) => {
         state.userInfo = userInfo;
-        setStorage({name: 'currentUser', content: userInfo});
-    },
+        setStorage({name: currentUserKey, content: userInfo});
+    }
 };
 
 const actions = {
     // 设置当前用户
     setUserInfo({commit}, userInfo) {
         return new Promise((resolve/*, reject*/) => {
-            commit('SET_USER_INFO', userInfo);
+            commit("SET_USER_INFO", userInfo);
             resolve();
         });
-    },
+    }
 };
 
 export default {
@@ -26,5 +27,5 @@ export default {
     namespaced: true,
     state,
     mutations,
-    actions,
+    actions
 };

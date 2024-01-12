@@ -2,12 +2,9 @@ package com.cmmplb.websocket.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cmmplb.websocket.entity.Attachment;
-import com.cmmplb.websocket.entity.User;
 import com.cmmplb.websocket.vo.AttachmentVO;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**

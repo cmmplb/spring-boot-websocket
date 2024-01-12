@@ -28,7 +28,7 @@
              , cc.`type`                                as type
         from `chat_contact` cc
         <!-- '类型:1-用户;2-群' -->
-        left join `sys_user` su on cc.`business_id` and cc.`type` = 1
+        left join `sys_user` su on su.`id` = cc.`business_id` and cc.`type` = 1
         left join `sys_attachment` sau on sau.`id` = su.`avatar`
         left join `chat_contact_group` ccg on ccg.`id` = cc.`business_id` and cc.`type` = 2
         left join `sys_attachment` sag on sag.`id` = ccg.`avatar`

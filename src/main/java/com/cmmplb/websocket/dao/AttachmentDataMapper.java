@@ -1,7 +1,6 @@
 package com.cmmplb.websocket.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cmmplb.websocket.entity.Attachment;
 import com.cmmplb.websocket.entity.AttachmentData;
 
 /**

@@ -1,5 +1,6 @@
 package com.cmmplb.websocket.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,12 +13,12 @@ import java.util.Date;
  */
 
 @Data
-public class MessageRecordDTO implements Serializable {
+public class RecentlyMessageDTO implements Serializable {
 
     /**
-     * 消息记录id
+     * 接收人:用户id/群id
      */
-    private Long id;
+    private Long receiveBusinessId;
 
     /**
      * 消息
@@ -27,5 +28,6 @@ public class MessageRecordDTO implements Serializable {
     /**
      * 发送时间
      */
-    private Date sendTime = new Date();
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date sendTime;
 }

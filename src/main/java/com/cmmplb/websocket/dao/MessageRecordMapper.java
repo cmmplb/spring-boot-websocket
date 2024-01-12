@@ -2,15 +2,10 @@ package com.cmmplb.websocket.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cmmplb.websocket.dto.MessagePageQueryDTO;
-import com.cmmplb.websocket.dto.MessageRecordDTO;
+import com.cmmplb.websocket.dto.MessageRecordPageQueryDTO;
 import com.cmmplb.websocket.entity.MessageRecord;
-import com.cmmplb.websocket.vo.ContactMessageVO;
-import com.cmmplb.websocket.vo.ContactVO;
+import com.cmmplb.websocket.vo.MessageRecordVO;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author penglibo
@@ -19,9 +14,9 @@ import java.util.Set;
  */
 public interface MessageRecordMapper extends BaseMapper<MessageRecord> {
 
-    List<MessageRecordDTO> selectMessageListByIds(@Param("ids") List<Long> ids);
+    Page<MessageRecordVO> selectByPaged(@Param("page") Page<MessageRecordVO> page, @Param("userId") Long userId, @Param("dto") MessageRecordPageQueryDTO dto);
 
-    List<ContactMessageVO> selectContactMessageList(@Param("type") Byte type, @Param("userId") Long userId, @Param("groupIds") Set<Long> groupIds);
+    Page<MessageRecordVO> selectUserMessageRecordByPaged(@Param("page") Page<MessageRecordVO> objectPage, @Param("userId") Long userId, @Param("businessId") Long businessId);
 
-    Page<ContactMessageVO> selectMessageByPaged(@Param("page") Page<ContactVO> page, @Param("userId") Long userId, @Param("dto") MessagePageQueryDTO dto);
+    Page<MessageRecordVO> selectGroupMessageRecordByPaged(@Param("page") Page<MessageRecordVO> objectPage, @Param("userId") Long userId, @Param("businessId") Long businessId);
 }
