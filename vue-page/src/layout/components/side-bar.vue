@@ -79,6 +79,7 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      /* 垂直居中对齐 */
       align-items: center;
       padding: 18px;
 

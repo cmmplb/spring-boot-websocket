@@ -72,6 +72,8 @@ handle(event){
 
 ````
 
+4. group by配合any_value(column)
+
 ***
 
 2024-01-05
@@ -81,3 +83,10 @@ handle(event){
 
 2024-01-12
 这周加了vuex存储最近消息和聊天记录，发送消息后将聊天用户置顶，同时把每个组件拆分了一下。
+
+
+***
+
+2024-01-19
+这周加了联系人和表情渲染到输入框的逻辑。
+![image_05.png](doc%2Fimages%2Fimage_06.png)

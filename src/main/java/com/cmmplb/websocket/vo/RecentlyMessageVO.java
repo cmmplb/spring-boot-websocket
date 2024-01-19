@@ -17,11 +17,6 @@ import java.util.Date;
 public class RecentlyMessageVO implements Serializable {
 
     /**
-     * 最近消息id
-     */
-    private Long id;
-
-    /**
      * 名称
      */
     private String name;

@@ -23,52 +23,101 @@
     </sql>
 
     <select id="selectByPaged" resultType="com.cmmplb.websocket.vo.RecentlyMessageVO">
-        select * from
+        select any_value(crm.name)           as name,
+               any_value(crm.avatar)         as avatar,
+               any_value(crm.type)           as type,
+               any_value(crm.send)           as send,
+               any_value(crm.business_id)    as businessId,
+               any_value(max(crm.send_time)) as sendTime
+        from
         <!-- 作为接收人 -->
-        (select crmr.`id`,
-                crmr.`type`,
-                crmr.`send_business_id`                      as businessId,
-                if(crmr.`send_business_id` = #{userId}, 1, 2)   send,
-                crmr.`message`,
-                crmr.`send_time`
-                 ,
-                if(crmr.`type` = 1, sur.`name`, ccgr.`name`) as name
-                 ,
-                if(crmr.`type` = 1, saur.`url`, sacr.`url`)  as avatar
-         from `chat_recently_message` crmr
-                  left join `sys_user` sur on sur.`id` = crmr.`send_business_id` and crmr.`type` = 1
-                  left join `sys_attachment` saur on saur.`id` = sur.`avatar`
-                  left join `chat_contact_group` ccgr on ccgr.`id` = crmr.`send_business_id` and crmr.`type` = 2
-                  left join `sys_attachment` sacr on sacr.`id` = ccgr.`avatar`
-         where crmr.`receive_business_id` = #{userId}
-         union all
+        (
+        select crmr.`type`,
+               crmr.`send_business_id`                       as business_id,
+               if(crmr.`send_business_id` = #{userId}, 1, 2) as send,
+               crmr.`send_time`                              as send_time,
+               if(crmr.`type` = 1, sur.`name`, ccgr.`name`)  as name,
+               if(crmr.`type` = 1, saur.`url`, sacr.`url`)   as avatar
+        from `chat_recently_message` crmr
+                 left join `sys_user` sur on sur.`id` = crmr.`send_business_id` and crmr.`type` = 1
+                 left join `sys_attachment` saur on saur.`id` = sur.`avatar`
+                 left join `chat_contacts_group` ccgr on ccgr.`id` = crmr.`send_business_id` and crmr.`type` = 2
+                 left join `sys_attachment` sacr on sacr.`id` = ccgr.`avatar`
+        where crmr.`receive_business_id` = #{userId}
+        union all
         <!-- 作为发送人 -->
-        select crms.`id`,
-               crms.`type`,
-               crms.`receive_business_id`                   as businessId,
-               if(crms.`send_business_id` = #{userId}, 1, 2)   send,
-               crms.`message`,
-               crms.`send_time`
-                ,
-               if(crms.`type` = 1, sus.`name`, ccgs.`name`) as name
-                ,
-               if(crms.`type` = 1, saus.`url`, sags.`url`)  as avatar
+        select crms.`type`,
+               crms.`receive_business_id`                    as business_id,
+               if(crms.`send_business_id` = #{userId}, 1, 2) as send,
+               crms.`send_time`                              as send_time,
+               if(crms.`type` = 1, sus.`name`, ccgs.`name`)  as name,
+               if(crms.`type` = 1, saus.`url`, sags.`url`)   as avatar
         from `chat_recently_message` crms
                  left join `sys_user` sus on sus.`id` = crms.`receive_business_id` and crms.`type` = 1
                  left join `sys_attachment` saus on saus.`id` = sus.`avatar`
-                 left join `chat_contact_group` ccgs on ccgs.`id` = crms.`receive_business_id` and crms.`type` = 2
+                 left join `chat_contacts_group` ccgs on ccgs.`id` = crms.`receive_business_id` and crms.`type` = 2
                  left join `sys_attachment` sags on sags.`id` = ccgs.`avatar`
         where crms.`send_business_id` = #{userId}
         ) crm
-        order by crm.`send_time` desc
+        group by crm.`business_id`
+        order by any_value(max(crm.send_time)) desc
     </select>
 
-    <select id="selectListByBusinessIds" resultType="com.cmmplb.websocket.dto.RecentlyMessageDTO">
-        select crm.`receive_business_id`, crm.`message`, crm.`send_time`
+    <!--<select id="selectByPaged2Java" resultType="com.cmmplb.websocket.vo.RecentlyMessageVO">
+        select if(crm.send_business_id = #{userId}, crm.receive_business_id, crm.send_business_id) businessId
+             , crm.`type`                                as                                        type
+             , crm.`message`                             as                                        message
+             , crm.`send_time`                           as                                        sendTime
+             , if(crm.`type` = 1, su.`name`, ccg.`name`) as                                        name
+             , if(crm.`type` = 1, sau.`url`, sac.`url`)  as                                        avatar
         from `chat_recently_message` crm
-        where crm.`receive_business_id` in
-        <foreach collection="sendBusinessIds" item="sendBusinessId" open="(" separator="," close=")">
-            #{sendBusinessId}
-        </foreach>
+        left join `sys_user` su on su.`id` = if(crm.send_business_id = #{userId}, crm.receive_business_id, crm.send_business_id) and crm.`type` = 1
+        left join `sys_attachment` sau on sau.`id` = su.`avatar`
+        left join `chat_contact_group` ccg on ccg.id = if(crm.send_business_id = #{userId}, crm.receive_business_id, crm.send_business_id) and crm.`type` = 2
+        left join `sys_attachment` sac on sac.`id` = ccg.`avatar`
+        where crm.send_business_id = #{userId} or crm.receive_business_id = #{userId}
+    </select>-->
+
+    <!-- 用union all替换上面的sql的or -->
+    <select id="selectByPaged2Java" resultType="com.cmmplb.websocket.vo.RecentlyMessageVO">
+        select crm.`name`        as name,
+               crm.`avatar`      as avatar,
+               crm.`type`        as type,
+               crm.`send`        as send,
+               crm.`business_id` as businessId,
+               crm.`message`     as message,
+               crm.`send_time`   as sendTime
+        from
+        <!-- 作为接收人 -->
+        (
+        select crmr.`type`,
+               crmr.`send_business_id`                       as business_id,
+               if(crmr.`send_business_id` = #{userId}, 1, 2) as send,
+               crmr.`message`                                as message,
+               crmr.`send_time`                              as send_time,
+               if(crmr.`type` = 1, sur.`name`, ccgr.`name`)  as name,
+               if(crmr.`type` = 1, saur.`url`, sacr.`url`)   as avatar
+        from `chat_recently_message` crmr
+                 left join `sys_user` sur on sur.`id` = crmr.`send_business_id` and crmr.`type` = 1
+                 left join `sys_attachment` saur on saur.`id` = sur.`avatar`
+                 left join `chat_contacts_group` ccgr on ccgr.`id` = crmr.`send_business_id` and crmr.`type` = 2
+                 left join `sys_attachment` sacr on sacr.`id` = ccgr.`avatar`
+        where crmr.`receive_business_id` = #{userId}
+        union all
+        <!-- 作为发送人 -->
+        select crms.`type`,
+               crms.`receive_business_id`                    as business_id,
+               if(crms.`send_business_id` = #{userId}, 1, 2) as send,
+               crms.`message`                                as message,
+               crms.`send_time`                              as send_time,
+               if(crms.`type` = 1, sus.`name`, ccgs.`name`)  as name,
+               if(crms.`type` = 1, saus.`url`, sags.`url`)   as avatar
+        from `chat_recently_message` crms
+                 left join `sys_user` sus on sus.`id` = crms.`receive_business_id` and crms.`type` = 1
+                 left join `sys_attachment` saus on saus.`id` = sus.`avatar`
+                 left join `chat_contacts_group` ccgs on ccgs.`id` = crms.`receive_business_id` and crms.`type` = 2
+                 left join `sys_attachment` sags on sags.`id` = ccgs.`avatar`
+        where crms.`send_business_id` = #{userId}
+        ) crm
     </select>
 </mapper>

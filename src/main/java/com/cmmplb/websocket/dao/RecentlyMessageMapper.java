@@ -2,7 +2,6 @@ package com.cmmplb.websocket.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cmmplb.websocket.dto.RecentlyMessageDTO;
 import com.cmmplb.websocket.dto.RecentlyMessagePageQueryDTO;
 import com.cmmplb.websocket.entity.RecentlyMessage;
 import com.cmmplb.websocket.vo.RecentlyMessageVO;
@@ -19,5 +18,5 @@ public interface RecentlyMessageMapper extends BaseMapper<RecentlyMessage> {
 
     Page<RecentlyMessageVO> selectByPaged(@Param("page") Page<RecentlyMessageVO> page, @Param("userId") Long userId, @Param("dto") RecentlyMessagePageQueryDTO dto);
 
-    List<RecentlyMessageDTO> selectListByBusinessIds(@Param("sendBusinessIds") List<Long> sendBusinessIds);
+    List<RecentlyMessageVO> selectByPaged2Java(@Param("userId") Long userId);
 }

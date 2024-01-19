@@ -133,17 +133,12 @@
       <el-select v-model="userId" ref="select" clearable placeholder="请选择用户">
         <template v-for="(ele,index) in offlineUserOption">
           <el-option :key="index" v-bind:id="ele.id" :label="ele.name" :value="ele.id">
-            <div style="display:flex;align-items: center;">
-              <img v-if="ele.avatar" :src="ele.avatar"
-                   style="width:20px;height:20px;margin-right:15px;border-radius: 50%;"
-                   alt=""/>
+            <div class="user-item">
+              <img class="user-item-avatar" v-if="ele.avatar" :src="ele.avatar" alt=""/>
               <template v-else>
-                <img v-if="ele.sex === 0" src="@/assets/images/avatar/woman.png"
-                     style="width:20px;height:20px;margin-right:15px;border-radius: 50%;" alt=""/>
-                <img v-if="ele.sex === 1" src="@/assets/images/avatar/man.png"
-                     style="width:20px;height:20px;margin-right:15px;border-radius: 50%;" alt=""/>
-                <img v-if="ele.sex === 2" src="@/assets/images/avatar/default.jpg"
-                     style="width:20px;height:20px;margin-right:15px;border-radius: 50%;" alt=""/>
+                <img v-if="ele.sex === 0" src="@/assets/images/avatar/woman.png" class="user-item-avatar" alt=""/>
+                <img v-if="ele.sex === 1" src="@/assets/images/avatar/man.png" class="user-item-avatar" alt=""/>
+                <img v-if="ele.sex === 2" src="@/assets/images/avatar/default.jpg" class="user-item-avatar" alt=""/>
               </template>
               <div>{{ ele.name }}</div>
             </div>
@@ -403,8 +398,11 @@ export default {
     handlerUserConfirm() {
       this.offlineUserOption.map(ele => {
         if (this.userId === ele.id) {
-          this.$store.dispatch("user/setUserInfo", ele);
           this.userId = undefined;
+          this.$store.dispatch("user/setUserInfo", ele);
+          this.$store.dispatch("message/delRecentlyMessageActivate");
+          this.$store.dispatch("message/delRecentlyMessageMap");
+          this.$store.dispatch("message/delMessageMap");
         }
         // 刷新当前页面
         window.location.reload();
@@ -428,6 +426,7 @@ export default {
 
   .navbar-logo {
     display: flex;
+    /* 垂直居中对齐 */
     align-items: center;
     /* 背景色设置为透明 */
     background-color: transparent;
@@ -441,6 +440,7 @@ export default {
       .navbar-nav-message {
         font-size: 18px;
         display: flex;
+        /* 垂直居中对齐 */
         align-items: center;
 
         span {
@@ -494,7 +494,6 @@ export default {
   .image-cropper {
     height: 500px;
     width: auto;
-    /*background-image: radial-gradient(#ffffff, #ffffff, #ffffff);*/
   }
 
   /* 圆形裁剪框 */
@@ -506,6 +505,7 @@ export default {
   /* 裁剪操作按钮 */
   .image-cropper-action {
     display: flex;
+    /* 水平居中对齐 */
     justify-content: center;
     margin-top: 30px;
 
@@ -525,6 +525,19 @@ export default {
 .switch-user-dialog {
   .el-select {
     margin-left: 40px;
+  }
+}
+
+/* 切换用户下拉选项 */
+.user-item {
+  display: flex;
+  align-items: center;
+
+  .user-item-avatar {
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 15px;
+    border-radius: 50%;
   }
 }
 </style>

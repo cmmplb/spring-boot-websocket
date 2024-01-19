@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmmplb.websocket.dao.ContactsMapper">
+
+    <sql id="base_column">
+        <!--@sql select-->
+         cc.`id`
+        ,cc.`type`
+        ,cc.`user_id`
+        ,cc.`business_id`
+        ,cc.`create_time`
+        ,cc.`create_by`
+        ,cc.`update_time`
+        ,cc.`update_by`
+        <!--@sql from `chat_contacts` cc-->
+    </sql>
+
+    <sql id="base_select">
+        select
+        <include refid="base_column"/>
+        from `chat_contacts` cc
+    </sql>
+
+    <select id="selectByPaged" resultType="com.cmmplb.websocket.vo.ContactsVO">
+        select cc.`id`                                  as id
+             , if(cc.`type` = 1, su.`name`, ccg.`name`) as name
+             , if(cc.`type` = 1, sau.`url`, sag.`url`)  as avatar
+             , cc.`type`                                as type
+        from `chat_contacts` cc
+        <!-- '类型:1-用户;2-群' -->
+        left join `sys_user` su on su.`id` = cc.`business_id` and cc.`type` = 1
+        left join `sys_attachment` sau on sau.`id` = su.`avatar`
+        left join `chat_contacts_group` ccg on ccg.`id` = cc.`business_id` and cc.`type` = 2
+        left join `sys_attachment` sag on sag.`id` = ccg.`avatar`
+        where cc.`user_id` = #{userId}
+        <if test="keywords != null and keywords != ''">
+            and (
+                su.`name` like concat('%', lower(#{keywords}), '%')
+                    or ccg.`name` like concat('%', lower(#{keywords}), '%')
+                )
+        </if>
+    </select>
+</mapper>
