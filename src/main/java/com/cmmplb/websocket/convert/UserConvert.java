@@ -1,7 +1,7 @@
 package com.cmmplb.websocket.convert;
 
-import com.cmmplb.websocket.entity.User;
-import com.cmmplb.websocket.vo.UserInfoVO;
+import com.cmmplb.websocket.domain.entity.User;
+import com.cmmplb.websocket.domain.vo.UserInfoVO;
 import org.mapstruct.Mapper;
 
 /**

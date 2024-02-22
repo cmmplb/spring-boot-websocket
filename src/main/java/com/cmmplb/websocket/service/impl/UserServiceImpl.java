@@ -2,11 +2,11 @@ package com.cmmplb.websocket.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cmmplb.websocket.dao.UserMapper;
-import com.cmmplb.websocket.entity.User;
+import com.cmmplb.websocket.domain.entity.User;
+import com.cmmplb.websocket.domain.vo.UserInfoVO;
 import com.cmmplb.websocket.exception.BusinessException;
 import com.cmmplb.websocket.service.UserService;
 import com.cmmplb.websocket.utils.SecurityUtil;
-import com.cmmplb.websocket.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +33,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserInfoVO getInfo() {
         Long userId = SecurityUtil.getUserId();
         return baseMapper.selectInfoById(userId);
+    }
+
+    @Override
+    public UserInfoVO getInfoById(Long id) {
+        return baseMapper.selectInfoById(id);
     }
 
     @Override

@@ -22,7 +22,7 @@
         from `chat_recently_message` crm
     </sql>
 
-    <select id="selectByPaged" resultType="com.cmmplb.websocket.vo.RecentlyMessageVO">
+    <select id="selectByPaged" resultType="com.cmmplb.websocket.domain.vo.RecentlyMessageVO">
         select any_value(crm.name)           as name,
                any_value(crm.avatar)         as avatar,
                any_value(crm.type)           as type,
@@ -33,11 +33,11 @@
         <!-- 作为接收人 -->
         (
         select crmr.`type`,
-               crmr.`send_business_id`                       as business_id,
-               if(crmr.`send_business_id` = #{userId}, 1, 2) as send,
-               crmr.`send_time`                              as send_time,
-               if(crmr.`type` = 1, sur.`name`, ccgr.`name`)  as name,
-               if(crmr.`type` = 1, saur.`url`, sacr.`url`)   as avatar
+               concat(crmr.`type`, '-', crmr.`send_business_id`) as business_id,
+               if(crmr.`send_business_id` = #{userId}, 1, 2)     as send,
+               crmr.`send_time`                                  as send_time,
+               if(crmr.`type` = 1, sur.`name`, ccgr.`name`)      as name,
+               if(crmr.`type` = 1, saur.`url`, sacr.`url`)       as avatar
         from `chat_recently_message` crmr
                  left join `sys_user` sur on sur.`id` = crmr.`send_business_id` and crmr.`type` = 1
                  left join `sys_attachment` saur on saur.`id` = sur.`avatar`
@@ -47,11 +47,11 @@
         union all
         <!-- 作为发送人 -->
         select crms.`type`,
-               crms.`receive_business_id`                    as business_id,
-               if(crms.`send_business_id` = #{userId}, 1, 2) as send,
-               crms.`send_time`                              as send_time,
-               if(crms.`type` = 1, sus.`name`, ccgs.`name`)  as name,
-               if(crms.`type` = 1, saus.`url`, sags.`url`)   as avatar
+               concat(crms.`type`, '-', crms.`receive_business_id`) as business_id,
+               if(crms.`send_business_id` = #{userId}, 1, 2)        as send,
+               crms.`send_time`                                     as send_time,
+               if(crms.`type` = 1, sus.`name`, ccgs.`name`)         as name,
+               if(crms.`type` = 1, saus.`url`, sags.`url`)          as avatar
         from `chat_recently_message` crms
                  left join `sys_user` sus on sus.`id` = crms.`receive_business_id` and crms.`type` = 1
                  left join `sys_attachment` saus on saus.`id` = sus.`avatar`
@@ -79,24 +79,26 @@
     </select>-->
 
     <!-- 用union all替换上面的sql的or -->
-    <select id="selectByPaged2Java" resultType="com.cmmplb.websocket.vo.RecentlyMessageVO">
-        select crm.`name`        as name,
-               crm.`avatar`      as avatar,
-               crm.`type`        as type,
-               crm.`send`        as send,
-               crm.`business_id` as businessId,
-               crm.`message`     as message,
-               crm.`send_time`   as sendTime
+    <select id="selectByPaged2Java" resultType="com.cmmplb.websocket.domain.vo.RecentlyMessageVO">
+        select crm.`name`                as name,
+               crm.`avatar`              as avatar,
+               crm.`type`                as type,
+               crm.`send`                as send,
+               crm.`business_id`         as businessId,
+               crm.`message`             as message,
+               crm.`uuid`                as uuid,
+               crm.`send_time`           as sendTime
         from
         <!-- 作为接收人 -->
         (
         select crmr.`type`,
-               crmr.`send_business_id`                       as business_id,
-               if(crmr.`send_business_id` = #{userId}, 1, 2) as send,
-               crmr.`message`                                as message,
-               crmr.`send_time`                              as send_time,
-               if(crmr.`type` = 1, sur.`name`, ccgr.`name`)  as name,
-               if(crmr.`type` = 1, saur.`url`, sacr.`url`)   as avatar
+               concat(crmr.`type`, '-', crmr.`send_business_id`) as business_id,
+               if(crmr.`send_business_id` = #{userId}, 1, 2)     as send,
+               crmr.`message`                                    as message,
+               crmr.`uuid`                                       as uuid,
+               crmr.`send_time`                                  as send_time,
+               if(crmr.`type` = 1, sur.`name`, ccgr.`name`)      as name,
+               if(crmr.`type` = 1, saur.`url`, sacr.`url`)       as avatar
         from `chat_recently_message` crmr
                  left join `sys_user` sur on sur.`id` = crmr.`send_business_id` and crmr.`type` = 1
                  left join `sys_attachment` saur on saur.`id` = sur.`avatar`
@@ -106,12 +108,13 @@
         union all
         <!-- 作为发送人 -->
         select crms.`type`,
-               crms.`receive_business_id`                    as business_id,
-               if(crms.`send_business_id` = #{userId}, 1, 2) as send,
-               crms.`message`                                as message,
-               crms.`send_time`                              as send_time,
-               if(crms.`type` = 1, sus.`name`, ccgs.`name`)  as name,
-               if(crms.`type` = 1, saus.`url`, sags.`url`)   as avatar
+               concat(crms.`type`, '-', crms.`receive_business_id`) as business_id,
+               if(crms.`send_business_id` = #{userId}, 1, 2)        as send,
+               crms.`message`                                       as message,
+               crms.`uuid`                                          as uuid,
+               crms.`send_time`                                     as send_time,
+               if(crms.`type` = 1, sus.`name`, ccgs.`name`)         as name,
+               if(crms.`type` = 1, saus.`url`, sags.`url`)          as avatar
         from `chat_recently_message` crms
                  left join `sys_user` sus on sus.`id` = crms.`receive_business_id` and crms.`type` = 1
                  left join `sys_attachment` saus on saus.`id` = sus.`avatar`

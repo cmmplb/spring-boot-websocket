@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <chat/>
+    <Chat/>
   </div>
 </template>
 
 <script>
 
-import chat from '@/layout/index.vue';
+import Chat from '@/layout/index.vue';
 
 export default {
   name: 'App',
   components: {
-    chat,
+    Chat: Chat,
   },
 };
 </script>

@@ -1,11 +1,11 @@
 package com.cmmplb.websocket.controller;
 
 import com.cmmplb.websocket.beans.PageResult;
-import com.cmmplb.websocket.dto.RecentlyMessagePageQueryDTO;
+import com.cmmplb.websocket.domain.dto.RecentlyMessagePageQueryDTO;
+import com.cmmplb.websocket.domain.vo.RecentlyMessageVO;
 import com.cmmplb.websocket.result.Result;
 import com.cmmplb.websocket.result.ResultUtil;
 import com.cmmplb.websocket.service.RecentlyMessageService;
-import com.cmmplb.websocket.vo.RecentlyMessageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

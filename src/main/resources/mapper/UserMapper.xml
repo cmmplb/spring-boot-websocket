@@ -20,7 +20,7 @@
         from `sys_user` su
     </sql>
 
-    <select id="selectInfoById" resultType="com.cmmplb.websocket.vo.UserInfoVO">
+    <select id="selectInfoById" resultType="com.cmmplb.websocket.domain.vo.UserInfoVO">
         select
         <include refid="base_column"/>
         ,sa.`url` as avatar
@@ -29,7 +29,7 @@
         where su.`id` = #{id}
     </select>
 
-    <select id="selectList" resultType="com.cmmplb.websocket.vo.UserInfoVO">
+    <select id="selectList" resultType="com.cmmplb.websocket.domain.vo.UserInfoVO">
         select
         <include refid="base_column"/>
         ,sa.url as avatar

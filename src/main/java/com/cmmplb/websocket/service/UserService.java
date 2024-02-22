@@ -1,8 +1,8 @@
 package com.cmmplb.websocket.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cmmplb.websocket.entity.User;
-import com.cmmplb.websocket.vo.UserInfoVO;
+import com.cmmplb.websocket.domain.entity.User;
+import com.cmmplb.websocket.domain.vo.UserInfoVO;
 
 import java.util.List;
 
@@ -18,4 +18,6 @@ public interface UserService extends IService<User> {
     List<UserInfoVO> getList();
 
     UserInfoVO getInfo();
+
+    UserInfoVO getInfoById(Long id);
 }

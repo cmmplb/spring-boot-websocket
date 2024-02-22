@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev": "vue-cli-service serve --mode development",
+    "prod": "vue-cli-service serve --mode production",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:prod": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -16,6 +19,7 @@
     "sass-loader": "^13.3.3",
     "vue": "^2.6.14",
     "vue-cropper": "^0.6.4",
+    "vue-draggable-resizable": "^2.0.0",
     "vuex": "^3.2.0"
   },
   "devDependencies": {

@@ -1,8 +1,8 @@
 package com.cmmplb.websocket.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cmmplb.websocket.entity.Attachment;
-import com.cmmplb.websocket.vo.AttachmentVO;
+import com.cmmplb.websocket.domain.entity.Attachment;
+import com.cmmplb.websocket.domain.vo.AttachmentVO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

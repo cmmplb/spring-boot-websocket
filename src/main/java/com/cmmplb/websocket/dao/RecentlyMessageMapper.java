@@ -2,9 +2,9 @@ package com.cmmplb.websocket.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cmmplb.websocket.dto.RecentlyMessagePageQueryDTO;
-import com.cmmplb.websocket.entity.RecentlyMessage;
-import com.cmmplb.websocket.vo.RecentlyMessageVO;
+import com.cmmplb.websocket.domain.dto.RecentlyMessagePageQueryDTO;
+import com.cmmplb.websocket.domain.entity.RecentlyMessage;
+import com.cmmplb.websocket.domain.vo.RecentlyMessageVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

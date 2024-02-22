@@ -1,9 +1,9 @@
 package com.cmmplb.websocket.controller;
 
+import com.cmmplb.websocket.domain.vo.UserInfoVO;
 import com.cmmplb.websocket.result.Result;
 import com.cmmplb.websocket.result.ResultUtil;
 import com.cmmplb.websocket.service.UserService;
-import com.cmmplb.websocket.vo.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +39,14 @@ public class UserController {
     @GetMapping(value = "/info")
     public Result<UserInfoVO> getInfo() {
         return ResultUtil.success(userService.getInfo());
+    }
+
+    /**
+     * 获取用户信息
+     */
+    @GetMapping(value = "/info/{id}")
+    public Result<UserInfoVO> getInfoById(@PathVariable(value = "id") Long id) {
+        return ResultUtil.success(userService.getInfoById(id));
     }
 
     /**

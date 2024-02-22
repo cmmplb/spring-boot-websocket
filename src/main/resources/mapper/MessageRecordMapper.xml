@@ -1,46 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmmplb.websocket.dao.MessageRecordMapper">
-    <sql id="base_column">
-        <!--@sql select-->
-        cmr.`id`
-             , cmr.`type`
-             , cmr.`send_business_id`
-             , cmr.`receive_business_id`
-             , cmr.`message`
-             , cmr.`create_time`
-             , cmr.`create_by`
-             , cmr.`update_time`
-             , cmr.`update_by`
-        <!--@sql from `chat_message_record` cmr-->
-    </sql>
-
-    <sql id="base_select">
-        select
-        <include refid="base_column"/>
-        from `chat_message_record` cmr
-    </sql>
-
     <!-- 这里用union all替换or查询 -->
-    <select id="selectUserMessageRecordByPaged" resultType="com.cmmplb.websocket.vo.MessageRecordVO">
+    <select id="selectUserMessageRecordByPaged" resultType="com.cmmplb.websocket.domain.vo.MessageRecordVO">
         select cmr.id,
                cmr.`name`        as name,
                cmr.`avatar`      as avatar,
                cmr.`type`        as type,
                cmr.`send`        as send,
                cmr.`business_id` as businessId,
+               cmr.`status`      as status,
+               cmr.`uuid`        as uuid,
                cmr.`message`     as message,
                cmr.`send_time`   as sendTime
         from (
         <!-- 作为接收人 -->
-        select cmr.`id`               as                    id
-             , cmr.`send_business_id` as                    business_id
-             , if(cmr.`send_business_id` = #{userId}, 1, 2) send
-             , cmr.`type`             as                    type
-             , cmr.`message`          as                    message
-             , cmr.`send_time`        as                    send_time
-             , su.`name`              as                    name
-             , sau.`url`              as                    avatar
+        select cmr.`id`                                        as id
+             , concat(cmr.`type`, '-', cmr.`send_business_id`) as business_id
+             , if(cmr.`send_business_id` = #{userId}, 1, 2)       send
+             , cmr.`type`                                      as type
+             , cmr.`message`                                   as message
+             , cmr.`send_time`                                 as send_time
+             , cmr.`status`                                    as status
+             , cmr.`uuid`                                      as uuid
+             , su.`name`                                       as name
+             , sau.`url`                                       as avatar
         from `chat_message_record` cmr
                  left join `sys_user` su on su.`id` = cmr.`send_business_id` and cmr.`type` = 1
                  left join `sys_attachment` sau on sau.`id` = su.`avatar`
@@ -48,14 +32,16 @@
           and cmr.`send_business_id` = #{businessId}
         union all
         <!-- 作为发送人 -->
-        select cmr.`id`                  as                 id
-             , cmr.`receive_business_id` as                 business_id
-             , if(cmr.`send_business_id` = #{userId}, 1, 2) send
-             , cmr.`type`                as                 type
-             , cmr.`message`             as                 message
-             , cmr.`send_time`           as                 send_time
-             , su.`name`                 as                 name
-             , sau.`url`                 as                 avatar
+        select cmr.`id`                                         as id
+             , concat(cmr.`type`, '-', cmr.`receive_business_id`) as business_id
+             , if(cmr.`send_business_id` = #{userId}, 1, 2)        send
+             , cmr.`type`                                       as type
+             , cmr.`message`                                    as message
+             , cmr.`send_time`                                  as send_time
+             , cmr.`status`                                     as status
+             , cmr.`uuid`                                       as uuid
+             , su.`name`                                        as name
+             , sau.`url`                                        as avatar
         from `chat_message_record` cmr
                  left join `sys_user` su on su.`id` = cmr.`send_business_id` and cmr.`type` = 1
                  left join `sys_attachment` sau on sau.`id` = su.`avatar`
@@ -64,14 +50,16 @@
         order by cmr.`send_time` desc
     </select>
 
-    <select id="selectGroupMessageRecordByPaged" resultType="com.cmmplb.websocket.vo.MessageRecordVO">
-        select cmr.`id`               as id
-             , cmr.`send_business_id` as businessId
-             , cmr.`type`             as type
-             , cmr.`message`          as message
-             , cmr.`send_time`        as sendTime
-             , ccg.`name`             as name
-             , sau.`url`              as avatar
+    <select id="selectGroupMessageRecordByPaged" resultType="com.cmmplb.websocket.domain.vo.MessageRecordVO">
+        select cmr.`id`                                      as id
+             , concat(cmr.`type`, '-', cmr.`send_business_id`) as businessId
+             , cmr.`type`                                    as type
+             , cmr.`message`                                 as message
+             , cmr.`send_time`                               as sendTime
+             , cmr.`status`                                  as status
+             , cmr.`uuid`                                    as uuid
+             , ccg.`name`                                    as name
+             , sau.`url`                                     as avatar
         from `chat_message_record` cmr
                  left join `chat_contacts_group` ccg on ccg.`id` = cmr.`send_business_id` and cmr.`type` = 2
                  left join `chat_contacts_group_user` ccgu on ccgu.`contact_group_id` = ccg.`id`
@@ -80,4 +68,14 @@
           and ccgu.`user_id` = #{userId}
         order by cmr.`send_time` desc
     </select>
+
+    <update id="read">
+        update `chat_message_record`
+        set `status`      = 1,
+            `update_time` = now(),
+            `update_by`   = #{userId}
+        where `status` = 0
+          and `type` = #{type}
+          and `send_business_id` = #{businessId}
+    </update>
 </mapper>

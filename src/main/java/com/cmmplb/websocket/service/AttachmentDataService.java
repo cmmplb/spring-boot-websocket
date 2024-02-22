@@ -1,7 +1,7 @@
 package com.cmmplb.websocket.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cmmplb.websocket.entity.AttachmentData;
+import com.cmmplb.websocket.domain.entity.AttachmentData;
 
 /**
  * @author penglibo

@@ -1,0 +1,21 @@
+/* 消息列表宽度变量 */
+$messageWidth: 25%;
+
+/* 聊天框主体宽度 */
+$contentWidth: 100% - $messageWidth;
+
+.flex {
+  display: flex;
+}
+
+.bdr {
+  border-right: 1px solid #70809054 !important;
+  /* box-shadow: 水平阴影 垂直阴影 模糊距离 阴影尺寸 阴影颜色 内外阴影; */
+  box-shadow: 1px 0 1px rgba(0, 0, 0, .075) !important;
+}
+
+.bdb {
+  border-bottom: 1px solid #70809054 !important;
+  /* box-shadow: 水平阴影 垂直阴影 模糊距离 阴影尺寸 阴影颜色 内外阴影; */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .075) !important;
+}

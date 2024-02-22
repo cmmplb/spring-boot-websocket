@@ -2,13 +2,15 @@
 import axios from 'axios';
 import { buildMsg } from '@/utils/message';
 import { getStorage } from '@/utils/storage';
+import {baseUrl} from "@/config/env";
 
 // 创建了一个新的axios实例
 const service = axios.create({
-    baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+    baseURL: baseUrl,
+    // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
     // baseURL: "http://localhost:9000/" , // url = base url + request url
     // withCredentials: true, // send cookies when cross-domain requests, 跨域请求，允许保存cookie
-    timeout: 5000, // 超时时间
+    timeout: 60000, // 超时时间
 });
 
 // 配置请求拦截器

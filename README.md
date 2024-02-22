@@ -11,24 +11,23 @@
 
 仓库地址：https://gitee.com/cmmplb/spring-boot-websocket
 
-本来打算写个前端连接websocket和netty的demo，顺着就写个通讯录的学习学习。
+前端连接websocket和netty的demo学习。
 
 目前只加了首页的样式和上传头像切换功能，学习一下，简单实现通讯录的逻辑，一点一点的加代码。
 
-后续完成的话会把vue合在boot项目做单体，现在先方便调试，前后端分离。
-
 #### finished
 
-![image_05.png](doc%2Fimages%2Fimage_05.png)
+![image_04.png](doc%2Fimages%2Fimage_04.png)
 
 - 单聊
+- 是否已读
+- 离线消息
+- 通讯录
+
 
 #### todo
 
-- 通讯录
 - 群聊
-- 离线消息
-- 是否已读
 - 黑名单
 
 # 项目图片
@@ -74,19 +73,29 @@ handle(event){
 
 4. group by配合any_value(column)
 
+5. JSONObject.parseObject解析出来的对象属性值是null，要有构造函数
+
 ***
 
 2024-01-05
-这周加了个双向聊天接收消息功能
+添加双向聊天接收消息功能
 
 ***
 
 2024-01-12
-这周加了vuex存储最近消息和聊天记录，发送消息后将聊天用户置顶，同时把每个组件拆分了一下。
-
+添加vuex存储最近消息和聊天记录，发送消息后将聊天用户置顶，同时把每个组件拆分了一下。
 
 ***
 
 2024-01-19
-这周加了联系人和表情渲染到输入框的逻辑。
-![image_05.png](doc%2Fimages%2Fimage_06.png)
+添加联系人和表情渲染到输入框的逻辑。
+![image_05.png](doc%2Fimages%2Fimage_05.png)
+
+***
+
+2024-01-26
+添加websocket心跳检测，断线重连，消息数量，已读未读，表情回显到聊天记录。
+
+2024-02-02
+调整了一下布局方式，使用vue-draggable-resizable组件实现窗口拖拽。
+![image_06.png](doc%2Fimages%2Fimage_06.png)

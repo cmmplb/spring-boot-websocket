@@ -2,9 +2,9 @@ package com.cmmplb.websocket.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cmmplb.websocket.beans.PageResult;
-import com.cmmplb.websocket.dto.RecentlyMessagePageQueryDTO;
-import com.cmmplb.websocket.entity.RecentlyMessage;
-import com.cmmplb.websocket.vo.RecentlyMessageVO;
+import com.cmmplb.websocket.domain.dto.RecentlyMessagePageQueryDTO;
+import com.cmmplb.websocket.domain.entity.RecentlyMessage;
+import com.cmmplb.websocket.domain.vo.RecentlyMessageVO;
 
 /**
 * @author penglibo

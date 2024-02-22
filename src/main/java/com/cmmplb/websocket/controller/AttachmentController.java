@@ -3,7 +3,7 @@ package com.cmmplb.websocket.controller;
 import com.cmmplb.websocket.result.Result;
 import com.cmmplb.websocket.result.ResultUtil;
 import com.cmmplb.websocket.service.AttachmentService;
-import com.cmmplb.websocket.vo.AttachmentVO;
+import com.cmmplb.websocket.domain.vo.AttachmentVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

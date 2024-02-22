@@ -19,7 +19,7 @@
             </template>
           </div>
         </div>
-        <el-dropdown-menu slot="dropdown">
+        <el-dropdown-menu class="navbar-nav-dropdown-menu" slot="dropdown">
           <el-dropdown-item>
             <div @click="handlerUploadAvatar">
               上传头像
@@ -245,9 +245,13 @@ export default {
             getInfo().then(res => {
               if (res.data.code === 200 && res.data.data) {
                 this.$store.dispatch("user/setUserInfo", res.data.data);
+              } else {
+                this.$message.error(res.data.msg);
               }
             });
             this.handleAvatarClose();
+          } else {
+            this.$message.error(res.data.msg);
           }
         });
       }
@@ -345,6 +349,8 @@ export default {
             this.imgUrl = attachment.url;
             this.imgId = attachment.id;
             this.handleCropperClose();
+          } else {
+            this.$message.error(res.data.msg);
           }
         }, 200);
       });
@@ -419,6 +425,7 @@ export default {
 .navbar-container {
   display: flex;
   justify-content: space-between;
+  width: 100%;
   padding: 10px;
   border-bottom: 1px solid #70809054 !important;
   /* box-shadow: 水平阴影 垂直阴影 模糊距离 阴影尺寸 阴影颜色 内外阴影; */
@@ -458,9 +465,19 @@ export default {
           }
         }
       }
+
+      //::v-deep .navbar-nav-dropdown-menu {
+      //  width: 300px !important;
+      //}
+
+
     }
   }
 }
+
+//::v-deep .el-dropdown-menu {
+//  width: 100px;
+//}
 
 /* 上传头像弹窗样式 */
 .upload-avatar-dialog {

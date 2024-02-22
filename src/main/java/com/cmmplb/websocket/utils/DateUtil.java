@@ -32,7 +32,7 @@ public class DateUtil {
         return (DateFormat)tl.get();
     }
 
-    public static String dateFormat(Date dateTime) {
+    public static String dateFormat(Date dateTime, byte... type) {
         Date currentDateTime = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);
@@ -47,17 +47,35 @@ public class DateUtil {
         int currentYear = currentCalendar.get(1);
         int currentMonth = currentCalendar.get(2) + 1;
         int currentDay = currentCalendar.get(5);
-        if ((currentDateTime.getTime() - dateTime.getTime()) / 1000L <= 60L) {
-            return "刚刚";
-        } else if (year == currentYear && month == currentMonth && day == currentDay) {
+        if (type[0] == 1) {
+            return (currentDateTime.getTime() - dateTime.getTime()) / 1000L <= 60L ? "刚刚" : getString(dateTime, year, currentYear, month, currentMonth, day, currentDay, hour, minute, week);
+        } else if (type[0] == 2) {
+            return getString(dateTime, year, currentYear, month, currentMonth, day, currentDay, hour, minute, week);
+        } else if (type[0] == 3) {
+            return year == currentYear && month == currentMonth && day == currentDay ? String.format("%02d", hour) + ":" + String.format("%02d", minute) : getSdf("yyyy/MM/dd").format(dateTime);
+        } else {
+            return getSdf("yyyy-MM-dd HH:mm").format(dateTime);
+        }
+    }
+
+    private static String getString(Date dateTime, int year, int currentYear, int month, int currentMonth, int day, int currentDay, int hour, int minute, int week) {
+        if (year == currentYear && month == currentMonth && day == currentDay) {
             return String.format("%02d", hour) + ":" + String.format("%02d", minute);
         } else if (year == currentYear && month == currentMonth && day == currentDay - 1) {
             return "昨天 " + String.format("%02d", hour) + ":" + String.format("%02d", minute);
         } else if (year == currentYear && month == currentMonth && currentDay - day < 7) {
-            String[] arr = new String[]{"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
+            String[] arr = new String[]{"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
             return arr[week] + " " + String.format("%02d", hour) + ":" + String.format("%02d", minute);
         } else {
             return getSdf("yyyy-MM-dd HH:mm").format(dateTime);
         }
+    }
+
+    public static Date addDays(Date date, int numDay) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(5, numDay);
+        Date tempDay = calendar.getTime();
+        return tempDay;
     }
 }

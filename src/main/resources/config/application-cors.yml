@@ -1,0 +1,11 @@
+cors:
+  # 是否启用跨域配置,默认false
+  enabled: false
+  # 过滤路径
+  path: '/**'
+  # 允许的域名
+  allowedOrigin: '*'
+  # 允许的请求头
+  allowedHeader: '*'
+  # 允许的方法（post、get等）
+  allowedMethod: '*'

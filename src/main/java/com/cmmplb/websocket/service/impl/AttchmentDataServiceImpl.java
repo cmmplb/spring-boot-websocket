@@ -2,7 +2,7 @@ package com.cmmplb.websocket.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cmmplb.websocket.dao.AttachmentDataMapper;
-import com.cmmplb.websocket.entity.AttachmentData;
+import com.cmmplb.websocket.domain.entity.AttachmentData;
 import com.cmmplb.websocket.service.AttachmentDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

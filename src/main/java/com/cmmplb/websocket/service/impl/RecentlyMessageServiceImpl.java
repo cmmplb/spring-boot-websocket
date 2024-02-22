@@ -4,13 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cmmplb.websocket.beans.PageResult;
+import com.cmmplb.websocket.constants.GlobalConstants;
 import com.cmmplb.websocket.dao.RecentlyMessageMapper;
-import com.cmmplb.websocket.dto.RecentlyMessagePageQueryDTO;
-import com.cmmplb.websocket.entity.RecentlyMessage;
+import com.cmmplb.websocket.domain.dto.RecentlyMessagePageQueryDTO;
+import com.cmmplb.websocket.domain.entity.MessageRecord;
+import com.cmmplb.websocket.domain.entity.RecentlyMessage;
+import com.cmmplb.websocket.domain.vo.RecentlyMessageVO;
+import com.cmmplb.websocket.service.MessageRecordService;
 import com.cmmplb.websocket.service.RecentlyMessageService;
 import com.cmmplb.websocket.utils.ListUtil;
 import com.cmmplb.websocket.utils.SecurityUtil;
-import com.cmmplb.websocket.vo.RecentlyMessageVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -24,6 +28,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class RecentlyMessageServiceImpl extends ServiceImpl<RecentlyMessageMapper, RecentlyMessage> implements RecentlyMessageService {
+
+    @Autowired
+    private MessageRecordService messageRecordService;
 
     @Override
     public PageResult<RecentlyMessageVO> getByPaged(RecentlyMessagePageQueryDTO dto) {
@@ -49,6 +56,7 @@ public class RecentlyMessageServiceImpl extends ServiceImpl<RecentlyMessageMappe
                 for (RecentlyMessage recentlyMessage : recentlyMessageList) {
                     if (vo.getSendTime().equals(recentlyMessage.getSendTime())) {
                         vo.setMessage(recentlyMessage.getMessage());
+                        vo.setUuid(recentlyMessage.getUuid());
                         break;
                     }
                 }
@@ -61,11 +69,26 @@ public class RecentlyMessageServiceImpl extends ServiceImpl<RecentlyMessageMappe
         // 查出关联数据分组排序后分页
         List<RecentlyMessageVO> list = baseMapper.selectByPaged2Java(userId);
         if (!CollectionUtils.isEmpty(list)) {
+            Set<String> businessIds = list.stream().map(ele -> ele.getBusinessId().replace(ele.getType() + "-", ""))
+                    .collect(Collectors.toSet());
+            List<MessageRecord> messageRecordList = messageRecordService.list(new LambdaQueryWrapper<MessageRecord>()
+                    .eq(MessageRecord::getStatus, GlobalConstants.NUM_ZERO)
+                    .in(MessageRecord::getSendBusinessId, businessIds)
+            );
+            Map<Long, List<MessageRecord>> messageRecordMap = messageRecordList.stream().collect(Collectors.groupingBy(MessageRecord::getSendBusinessId));
             // 分组
-            Map<Long, List<RecentlyMessageVO>> businessIdMap = list.stream().collect(Collectors.groupingBy(RecentlyMessageVO::getBusinessId));
+            Map<String, List<RecentlyMessageVO>> businessIdMap = list.stream().collect(Collectors.groupingBy(RecentlyMessageVO::getBusinessId));
             List<RecentlyMessageVO> res = new ArrayList<>();
-            for (Map.Entry<Long, List<RecentlyMessageVO>> entry : businessIdMap.entrySet()) {
+            for (Map.Entry<String, List<RecentlyMessageVO>> entry : businessIdMap.entrySet()) {
                 List<RecentlyMessageVO> value = entry.getValue();
+                for (RecentlyMessageVO vo : value) {
+                    for (MessageRecord messageRecord : messageRecordList) {
+                        if (vo.getBusinessId().equals(messageRecord.getType() + "-" + messageRecord.getSendBusinessId())) {
+                            vo.setCount(messageRecordMap.get(messageRecord.getSendBusinessId()).size());
+                            break;
+                        }
+                    }
+                }
                 // 获取最新时间
                 value.stream().max(Comparator.comparing(RecentlyMessageVO::getSendTime)).ifPresent(res::add);
             }
